@@ -1,0 +1,170 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Echequie</title>
+</head>
+<body>
+    <h1>Echequier</h1>
+
+    <h4>Quoi et où vous voulez placer sur l'echequier?</h4>
+    Je veux placer <select id="typeElement"><option value="r">une renne</option><option value="c">un cheval</option></select>
+    sur la ligne
+    <select id="ligne">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+    </select>
+    et
+    colonne
+    <select id="colonne">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+    </select>
+
+    et
+
+    <button onclick="placerElement()">Je confirme</button>
+
+    <hr>
+
+</body>
+
+<script>
+    var tab = new Array(8);
+    var ligneActuelle=0;
+    var colonneActuelle=0;
+
+
+    function initEchequier(tab){
+        for(var i=0;i<8;i++){
+            tab[i] = new Array(8);
+            for(var j=0;j<8;j++){
+                tab[i][j]="O";
+            }
+        }
+        return tab;
+    }
+
+
+    function showEchequier(tab) {
+        var color;
+        var greenElements = ["X","R","C"];
+        document.write("<table border='1px black solid'>");
+        for(var i=0;i<8;i++){
+            document.write("<tr>");
+            for(var j=0;j<8;j++){
+                if(tab[i][j] == "O"){
+                    color= "gray";  
+                }else{
+                    if(greenElements.indexOf(tab[i][j])){
+                        color = "red";
+                    }else{
+                        color = "green";
+                    }
+
+                }
+
+                if((i+j)%2){
+                    document.write("<td style='background-color: black;color: "+color+"'>"+tab[i][j] + "</td>");
+                }else{
+                    document.write("<td style='background-color: white;color: "+color+"'>"+tab[i][j] + "</td>");
+                }
+            }
+            document.write("</tr>")
+        }
+        document.write("</table>");
+    }
+
+
+
+    function placerElement(){
+        var SelecttypeElement = document.getElementById("typeElement");
+        var typeElement = SelecttypeElement.options[SelecttypeElement.selectedIndex].value;
+
+        var SelectLigne = document.getElementById("ligne");
+        var ligne = SelectLigne.options[SelectLigne.selectedIndex].value;
+
+        var SelectColonne = document.getElementById("colonne");
+        var colonne = SelectColonne.options[SelectColonne.selectedIndex].value;
+
+
+        if(typeElement == "c"){
+            placerCheval(ligne,colonne);
+        }else if( typeElement == "r") {
+            placerRenne(ligne,colonne);
+        }else{
+            alert("choix incorrecte");
+        }
+
+    }
+
+
+
+
+    tab = initEchequier(tab);
+    showEchequier(tab);
+
+    function placerRenne(ligne,colonne){
+
+        for(var i=0;i<8;i++){
+            for(var j=0;j<8;j++){
+                if( (j == (colonne -1 )) || (i == (ligne -1 )) || ( Math.abs(ligne - i -1) == Math.abs(colonne - j -1))){
+                    tab[i][j]="X";
+                }
+            }
+        }
+
+        tab[ligne-1][colonne-1] = "R";
+
+
+        document.write("<h4>Les déplacements possibles de cette renne sont en vert:<h4>");
+        showEchequier(tab);
+        document.write("<a href='echequier.html'>Reinitialiser</a>");
+
+    }
+
+
+    function placerCheval(ligne,colonne){
+
+        for(var i=0;i<8;i++){
+            for(var j=0;j<8;j++){
+                if( ( ( Math.abs(ligne-1 - i ) == 1) && Math.abs(colonne-1 - j ) == 2 ) || ( ( Math.abs(ligne-1 - i ) == 2) && Math.abs(colonne-1 - j ) == 1 ) ){
+                    tab[i][j]="X";
+                }
+            }
+        }
+
+
+
+        tab[ligne-1][colonne-1] = "C";
+
+        document.write("<h4>Les déplacements possibles de ce cheval sont en vert:<h4>");
+
+        showEchequier(tab);
+
+        document.write("<a href='echequier.html'>Reinitialiser</a>");
+
+    }
+
+
+
+
+
+
+</script>
+
+
+
+</html>
